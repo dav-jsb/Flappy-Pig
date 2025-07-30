@@ -1,2 +1,2 @@
 # Flappy-Pig
-Projeto Introdução à Computação
+Projeto Introdução à Programação
