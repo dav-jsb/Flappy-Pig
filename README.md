@@ -1,4 +1,4 @@
-# Flappy-Pig
+# Bibliotecas 
 import pygame
 import random
 
@@ -8,7 +8,7 @@ LARGURA, ALTURA = 400, 600
 screen = pygame.display.set_mode((LARGURA, ALTURA))
 clock = pygame.time.Clock()
 
-# Cores só para testar
+# Cores Teste
 BRANCO = (255, 255, 255)
 VERDE = (0, 255, 0)
 VERMELHO = (255, 0, 0)
