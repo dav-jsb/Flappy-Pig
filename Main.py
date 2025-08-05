@@ -36,7 +36,7 @@ def criar_tubos():
 def criar_item():
     y = random.randint(100, 500)
     cor = random.choice([AZUL, VERMELHO, BRANCO])
-    item = Item(LARGURA + 50, y, cor)
+    item = Item(LARGURA + 50, y, cor, velocidade_mapa)
     itens.add(item)
     todos_sprites.add(item)
 
