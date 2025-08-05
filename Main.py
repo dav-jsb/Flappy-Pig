@@ -3,9 +3,9 @@ import pygame
 import random
 
 # Arquivos do jogo
-import porco
-import tubo
-import items
+import Pig
+import Tubo
+import Item
 
 # Configurações Iniciais
 pygame.init()
@@ -21,14 +21,14 @@ AZUL = (0, 0, 255)
 
 # Variáveis Globais
 gravidade = 0.5
-velocidade_tubo = 3
+velocidade_mapa = 3
 
 
 # Função para criar os Tubos
 def criar_tubos():
     y = random.randint(150, 450)
-    tubo_cima = Tubo(LARGURA + 50, y, True)
-    tubo_baixo = Tubo(LARGURA + 50, y, False)
+    tubo_cima = Tubo(LARGURA + 50, y, True,VERDE,velocidade_mapa)
+    tubo_baixo = Tubo(LARGURA + 50, y, False,VERDE,velocidade_mapa)
     tubos.add(tubo_cima, tubo_baixo)
     todos_sprites.add(tubo_cima, tubo_baixo)
 
