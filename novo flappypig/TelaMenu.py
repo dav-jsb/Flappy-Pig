@@ -7,10 +7,8 @@ class TelaMenu(TelaBase):
         self.manager = game_manager
         self.font = pygame.font.SysFont('Arial', 40)
     
-    def handle_events(self):
-        ### tem algum erro nesse if aqui abaixo, o return "game" é pra ignorar esse erro por enquanto e corrigir erros mais criticos, tem que verificar ele depois
-        return "game"
-        for event in pygame.event.get():
+    def handle_events(self,events):
+        for event in events:
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.KEYDOWN:

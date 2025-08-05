@@ -59,8 +59,11 @@ class FlappyPig:
     def run_game(self):
         running = True
         while running:
+            events = pygame.event.get()  # <- captura os eventos UMA vez
+
+
             # Controles
-            for event in pygame.event.get():
+            for event in events:
                 if event.type == pygame.QUIT:
                     running = False
                 
@@ -76,7 +79,7 @@ class FlappyPig:
             
             # Lógica do jogo
             if self.manager.state == GameState.MENU:
-                result = self.menu_screen.handle_events()
+                result = self.menu_screen.handle_events(events)
                 if result == False:
                     running = False
                 elif result == "game":
@@ -106,7 +109,7 @@ class FlappyPig:
                 self.screen.blit(score_text, (10, 10))
             
             elif self.manager.state == GameState.GAME_OVER:
-                result = self.game_over_screen.handle_events()
+                result = self.game_over_screen.handle_events(events)
                 if result == False:
                     running = False
                 elif result == "game":
@@ -129,5 +132,7 @@ class FlappyPig:
 
 if __name__ == "__main__":
     verde = (0,255,0)
-    game = FlappyPig(0.5,-7,verde)
+    gravidade = 0.5
+    altura_do_pulo = -7 ##negativo pq a tela conta pra cima como -
+    game = FlappyPig(gravidade,altura_do_pulo,verde)
     game.run_game()

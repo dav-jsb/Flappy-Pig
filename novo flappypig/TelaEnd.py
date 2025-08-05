@@ -8,8 +8,8 @@ class TelaEnd(TelaBase):
         self.big_font = pygame.font.SysFont('Arial', 40)
         self.small_font = pygame.font.SysFont('Arial', 20)
     
-    def handle_events(self):
-        for event in pygame.event.get():
+    def handle_events(self,events):
+        for event in events:
             if event.type == pygame.QUIT:
                 return False
             if event.type == pygame.KEYDOWN:
