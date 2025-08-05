@@ -9,9 +9,10 @@ from TelaEnd import TelaEnd
 
 class FlappyPig:
 
-    def __init__(self,gravity,pulo):
+    def __init__(self,gravity,pulo,color_pipe):
         self.gravity = gravity
         self.pulo = pulo
+        self.color_pipe = color_pipe
         pygame.init()
         self.width = 400
         self.height = 600
@@ -43,8 +44,8 @@ class FlappyPig:
     
     def create_pipe(self):
         y = random.randint(150, 450)
-        top_pipe = Pipe(self.width + 50, y, True, 3)
-        bottom_pipe = Pipe(self.width + 50, y, False, 3)
+        top_pipe = Pipe(self.width + 50, y, True, 3, self.color_pipe)
+        bottom_pipe = Pipe(self.width + 50, y, False, 3, self.color_pipe)
         self.pipes.add(top_pipe, bottom_pipe)
         self.all_sprites.add(top_pipe, bottom_pipe)
     
@@ -127,5 +128,6 @@ class FlappyPig:
         pygame.quit()
 
 if __name__ == "__main__":
-    game = FlappyPig(0.5,-7)
+    verde = (0,255,0)
+    game = FlappyPig(0.5,-7,verde)
     game.run_game()
