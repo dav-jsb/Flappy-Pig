@@ -5,7 +5,7 @@ import random
 # Arquivos do jogo
 import Pig
 import Tubo
-import Items
+import Item
 
 # Configurações Iniciais
 pygame.init()
