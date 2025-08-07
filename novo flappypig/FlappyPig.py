@@ -119,7 +119,7 @@ class FlappyPig:
                     self.all_sprites.empty()
                     self.pipes.empty()
                     self.items.empty()
-                    self.player = Pig(self.width//4, self.height//2)
+                    self.player = Pig(self.width//4, self.height//2,gravidade,altura_do_pulo)
                     self.all_sprites.add(self.player)
                     self.manager.state = GameState.PLAYING
                 elif result == "menu": ###voltar ao menu
