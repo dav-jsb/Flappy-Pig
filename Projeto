@@ -2,11 +2,6 @@
 import pygame
 import random
 
-# Arquivos do jogo
-import porco
-import tubo
-import items
-
 # Configurações Iniciais
 pygame.init()
 LARGURA, ALTURA = 400, 600
@@ -23,6 +18,58 @@ AZUL = (0, 0, 255)
 gravidade = 0.5
 velocidade_tubo = 3
 
+# Classe do Porco
+class Pig(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface((30, 30))
+        self.image.fill(VERMELHO)
+        self.rect = self.image.get_rect(center=(x, y))
+        self.velocidade = 0
+
+    def update(self):
+        self.velocidade += gravidade
+        self.rect.y += self.velocidade
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            self.velocidade = -7
+
+        # Limites da tela
+        if self.rect.top <= 0:
+            self.rect.top = 0
+        if self.rect.bottom >= ALTURA:
+            self.rect.bottom = ALTURA
+
+# Classe dos Tubos
+class Tubo(pygame.sprite.Sprite):
+    def __init__(self, x, y, invertido):
+        super().__init__()
+        self.image = pygame.Surface((60, 300))
+        self.image.fill(VERDE)
+        if invertido:
+            self.image = pygame.transform.flip(self.image, False, True)
+            self.rect = self.image.get_rect(midbottom=(x, y - 100))
+        else:
+            self.rect = self.image.get_rect(midtop=(x, y + 100))
+
+    def update(self):
+        self.rect.x -= velocidade_tubo
+        if self.rect.right < 0:
+            self.kill()
+
+# Classe dos Itens
+class Item(pygame.sprite.Sprite):
+    def __init__(self, x, y, cor):
+        super().__init__()
+        self.image = pygame.Surface((20, 20))
+        self.image.fill(cor)
+        self.rect = self.image.get_rect(center=(x, y))
+
+    def update(self):
+        self.rect.x -= velocidade_tubo
+        if self.rect.right < 0:
+            self.kill()
 
 # Função para criar os Tubos
 def criar_tubos():
