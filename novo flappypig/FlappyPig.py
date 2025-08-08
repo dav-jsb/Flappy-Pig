@@ -2,6 +2,7 @@
 import pygame
 import random
 ## imports de classes do jogo
+from Consts import Cores
 from Pig import Pig
 from Pipe import Pipe
 from Item import Item
@@ -102,12 +103,12 @@ class FlappyPig:
                 self.manager.score += len(collected)
                 
                 # Renderização
-                self.screen.fill((0, 0, 0)) ###fundo preto
+                self.screen.fill(Cores.PRETO) ###fundo preto
                 self.all_sprites.draw(self.screen) ## colocar todos os objetos da tela
                 
                 # Mostra pontuação
                 font = pygame.font.SysFont('Arial', 30) ##escolher a fonte
-                score_text = font.render(f"Score: {self.manager.score}", True, (255, 255, 255)) ##configurar a pontuação 
+                score_text = font.render(f"Score: {self.manager.score}", True, Cores.BRANCO) ##configurar a pontuação 
                 self.screen.blit(score_text, (10, 10)) ##mostrar na tela
             
             elif self.manager.state == GameState.GAME_OVER: ###se perder ##tem erro no reiniciar
@@ -132,9 +133,7 @@ class FlappyPig:
         
         pygame.quit()
 
-if __name__ == "__main__":
-    verde = (0,255,0) # cor
-    gravidade = 0.5 #queda
-    altura_do_pulo = -7 ##negativo pq a tela conta pra cima como -
-    game = FlappyPig(gravidade,altura_do_pulo,verde) #cria um objeto do tipo FlappyPig
-    game.run_game() #inicia o jogo 
+gravidade = 0.5 #queda
+altura_do_pulo = -7 ##negativo pq a tela conta pra cima como -
+game = FlappyPig(gravidade,altura_do_pulo,Cores.VERDE) #cria um objeto do tipo FlappyPig
+game.run_game() #inicia o jogo 
