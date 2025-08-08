@@ -3,9 +3,9 @@ import pygame
 import random
 
 # Arquivos do jogo
-import Pig
-import Tubo
-import Item
+from Pig import Pig
+from Tubo import Tubo
+from Item import Item
 
 # Configurações Iniciais
 pygame.init()
@@ -36,7 +36,7 @@ def criar_tubos():
 def criar_item():
     y = random.randint(100, 500)
     cor = random.choice([AZUL, VERMELHO, BRANCO])
-    item = Item(LARGURA + 50, y, cor)
+    item = Item(LARGURA + 50, y, cor, velocidade_mapa)
     itens.add(item)
     todos_sprites.add(item)
 
@@ -72,7 +72,7 @@ def main():
     tubos = pygame.sprite.Group()
     itens = pygame.sprite.Group()
 
-    porco = Pig(100, ALTURA // 2)
+    porco = Pig(100, ALTURA // 2, AZUL)
     todos_sprites.add(porco)
 
     TIMER_TUBOS = pygame.USEREVENT + 1

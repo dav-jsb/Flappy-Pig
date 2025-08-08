@@ -1,0 +1,2 @@
+##cola esse comando no terminal pra instalar o pygame
+pip install --break-system-packages pygame
