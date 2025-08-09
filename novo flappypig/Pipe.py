@@ -23,7 +23,7 @@ class Pipe(GameObject): ### talvez mudar a estrutura dessa classe tbm ajude
             #faz a mesma coisa mas sem inverter
         self.speed = speed
     
-    def update(self):
+    def update(self): # esse aqui ta certo
         self.rect.x -= self.speed
         if self.rect.right < 0:
             self.kill()

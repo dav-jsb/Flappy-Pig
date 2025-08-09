@@ -4,7 +4,8 @@ import random
 ## imports de classes do jogo
 from Consts import Cores
 from Pig import Pig
-from Pipe import Pipe
+#from Pipe import Pipe
+from NewPipe import Pipe
 from Item import Item
 from GameState import GameState,GameManager
 from TelaMenu import TelaMenu
@@ -12,11 +13,13 @@ from TelaEnd import TelaEnd
 
 class FlappyPig:
     ##construtor da classe, os valores aqui são escolhidos ao criar um objeto nessa classe
-    def __init__(self,gravity,pulo,color_pipe):
+    def __init__(self,gravity,pulo,color_pipe,map_speed,espaco_tubo):
         ##definindo os valores das variaveis da classe
         self.gravity = gravity
         self.pulo = pulo
         self.color_pipe = color_pipe
+        self.map_speed = map_speed
+        self.espaco_tubo = espaco_tubo
         pygame.init() #inicia o pygame
         self.width = 400 #largura da tela
         self.height = 600 # altura da tela
@@ -46,13 +49,20 @@ class FlappyPig:
         self.menu_screen = TelaMenu(self.width, self.height, self.manager) 
         self.game_over_screen = TelaEnd(self.width, self.height, self.manager)
     
+    #def create_pipe(self): ###função pra criar os canos, tem que corrigir
+    #    y = random.randint(150, 450)
+    #    top_pipe = Pipe(self.width + 50, y, True, 3, self.color_pipe)
+    #    bottom_pipe = Pipe(self.width + 50, y, False, 3, self.color_pipe)
+    #    self.pipes.add(top_pipe, bottom_pipe)
+    #    self.all_sprites.add(top_pipe, bottom_pipe)
+    
     def create_pipe(self): ###função pra criar os canos, tem que corrigir
-        y = random.randint(150, 450)
-        top_pipe = Pipe(self.width + 50, y, True, 3, self.color_pipe)
-        bottom_pipe = Pipe(self.width + 50, y, False, 3, self.color_pipe)
+        y = random.randint(150, self.height-150)
+        top_pipe = Pipe(y+self.espaco_tubo//2, self.height, self.width, self.map_speed, self.color_pipe)
+        bottom_pipe = Pipe(0, y-self.espaco_tubo//2, self.width, self.map_speed, self.color_pipe)
         self.pipes.add(top_pipe, bottom_pipe)
         self.all_sprites.add(top_pipe, bottom_pipe)
-    
+
     def create_item(self): ### Criar os itens, tem que corrigir tbm
         y = random.randint(100, 500)
         item_type = random.choice(["blue", "red", "white"])
@@ -135,5 +145,7 @@ class FlappyPig:
 
 gravidade = 0.5 #queda
 altura_do_pulo = -7 ##negativo pq a tela conta pra cima como -
-game = FlappyPig(gravidade,altura_do_pulo,Cores.VERDE) #cria um objeto do tipo FlappyPig
+velocidade_mapa = 3
+espaco_entre_tubo = 150
+game = FlappyPig(gravidade,altura_do_pulo,Cores.VERDE,velocidade_mapa,espaco_entre_tubo) #cria um objeto do tipo FlappyPig
 game.run_game() #inicia o jogo 
