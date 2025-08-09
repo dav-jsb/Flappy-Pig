@@ -1,5 +1,6 @@
 import pygame
 from TelaBase import TelaBase
+from Consts import Cores
 
 class TelaEnd(TelaBase):
     def __init__(self, width, height, game_manager):
@@ -21,12 +22,12 @@ class TelaEnd(TelaBase):
         return True
     
     def draw(self):
-        self.screen.fill((0, 0, 0))
+        self.screen.fill(Cores.PRETO)
         
-        game_over = self.big_font.render("GAME OVER", True, (255, 0, 0))
-        score = self.small_font.render(f"Score: {self.manager.score}", True, (255, 255, 255))
-        high_score = self.small_font.render(f"High Score: {self.manager.high_score}", True, (255, 255, 255))
-        restart = self.small_font.render("Press SPACE to restart", True, (0, 255, 0))
+        game_over = self.big_font.render("GAME OVER", True, Cores.VERMELHO)
+        score = self.small_font.render(f"Score: {self.manager.score}", True, Cores.BRANCO)
+        high_score = self.small_font.render(f"High Score: {self.manager.high_score}", True, Cores.BRANCO)
+        restart = self.small_font.render("Press SPACE to restart", True, Cores.VERDE)
         menu = self.small_font.render("Press ESC for menu", True, (200, 200, 200))
         
         self.screen.blit(game_over, (self.width//2 - game_over.get_width()//2, self.height//4))

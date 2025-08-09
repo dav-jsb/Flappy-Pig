@@ -1,6 +1,8 @@
 from GameObject import GameObject
 
-class Item(GameObject):
+class Item(GameObject): 
+    #### isso aqui vamos refazer quase do 0,
+    # n tem muita utilidade essa classe como esta agora
     def __init__(self, x, y, item_type):
         self.types = {
             "blue": (0, 0, 255),

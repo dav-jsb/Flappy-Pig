@@ -1,5 +1,6 @@
 import pygame
 from TelaBase import TelaBase
+from Consts import Cores
 
 class TelaMenu(TelaBase):
     def __init__(self, width, height, game_manager):
@@ -18,9 +19,9 @@ class TelaMenu(TelaBase):
         return True
     
     def draw(self):
-        self.screen.fill((0, 0, 0))
-        title = self.font.render("PIG FLAPPY", True, (255, 255, 255))
-        start = self.font.render("Press SPACE to Start", True, (255, 255, 255))
+        self.screen.fill(Cores.PRETO)
+        title = self.font.render("PIG FLAPPY", True, Cores.BRANCO)
+        start = self.font.render("Press SPACE to Start", True, Cores.BRANCO)
         
         self.screen.blit(title, (self.width//2 - title.get_width()//2, self.height//3))
         self.screen.blit(start, (self.width//2 - start.get_width()//2, self.height//2))
