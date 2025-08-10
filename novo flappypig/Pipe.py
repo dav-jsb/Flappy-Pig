@@ -1,28 +1,23 @@
 import pygame
 from GameObject import GameObject
 
-### pra quem for resolver isso, acho que talvez ao inves de criar um tubo pra cima
-#e depois outro menor e inverter (como esta agora) seja melhor criar um grante tubo
-# e abrir um espaço no meio
-
-class Pipe(GameObject): ### talvez mudar a estrutura dessa classe tbm ajude
-    def __init__(self, x, y, is_top, speed,color): 
-        ### x e y acho q são o centro do tubo
-        # is_top é uma variavel pra inverter se ele for pro lado de cima
-        # speed é a velocidade do mapa, e color é a cor do tubo
-        height = 300
-        gap = 150
-        
+class Pipe(GameObject):
+    def __init__(self, x, gap_center, is_top, speed, color, screen_height):
+        # Altura proporcional da tela (pode ajustar a porcentagem)
+        total_height = screen_height
+        pipe_width = 60
+        pipe_height = total_height  # desenhamos o cano comprido e depois só mostramos a parte visível
+        super().__init__(x, gap_center, pipe_width, pipe_height, color)
+        # Define onde vai cortar para criar o gap
+        gap_size = int(screen_height * 0.25)  # 25% da altura como abertura
         if is_top:
-            super().__init__(x, y - gap, 60, height, color) 
-            # usa o construtor da classe mãe (GameObject) pra completar
+            # Posiciona o topo
+            self.rect.bottom = gap_center - gap_size // 2
             self.image = pygame.transform.flip(self.image, False, True)
-             # inverte se for top
         else:
-            super().__init__(x, y + gap, 60, height, color)
-            #faz a mesma coisa mas sem inverter
+            # Posiciona o de baixo
+            self.rect.top = gap_center + gap_size // 2
         self.speed = speed
-    
     def update(self):
         self.rect.x -= self.speed
         if self.rect.right < 0:
