@@ -1,18 +1,16 @@
 from GameObject import GameObject
 
-class Item(GameObject): 
-    #### isso aqui vamos refazer quase do 0,
-    # n tem muita utilidade essa classe como esta agora
-    def __init__(self, x, y, item_type):
-        self.types = {
-            "blue": (0, 0, 255),
-            "red": (255, 0, 0),
-            "white": (255, 255, 255)
-        }
-        color = self.types.get(item_type, (255, 255, 255))
+class Item(GameObject):
+    COLORS = {
+        "blue": (0, 0, 255),
+        "red": (255, 0, 0),
+        "white": (255, 255, 255)
+    }
+    def __init__(self, x, y, tipo):
+        color = self.COLORS.get(tipo, (255, 255, 255))
         super().__init__(x, y, 20, 20, color)
         self.speed = 3
-        self.type = item_type
+        self.tipo = tipo  #Só alterei o nome daqui para não me perder na alteração da main
     
     def update(self):
         self.rect.x -= self.speed
