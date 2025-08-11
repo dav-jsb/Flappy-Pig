@@ -20,18 +20,35 @@ class TelaEnd(TelaBase):
                 if event.key == pygame.K_ESCAPE:
                     return "menu"
         return True
-    
     def draw(self):
         self.screen.fill(Cores.PRETO)
-        
+        # Textos Finais escritos separadamente
         game_over = self.big_font.render("GAME OVER", True, Cores.VERMELHO)
-        score = self.small_font.render(f"Score: {self.manager.score}", True, Cores.BRANCO)
-        high_score = self.small_font.render(f"High Score: {self.manager.high_score}", True, Cores.BRANCO)
+        red_score = self.small_font.render(f"Red Score: {self.manager.score_red}", True, Cores.VERMELHO)
+        white_score = self.small_font.render(f"White Score: {self.manager.score_white}", True, Cores.BRANCO)
+        blue_score = self.small_font.render(f"Blue Score: {self.manager.score_blue}", True, Cores.AZUL)
         restart = self.small_font.render("Press SPACE to restart", True, Cores.VERDE)
         menu = self.small_font.render("Press ESC for menu", True, (200, 200, 200))
-        
-        self.screen.blit(game_over, (self.width//2 - game_over.get_width()//2, self.height//4))
-        self.screen.blit(score, (self.width//2 - score.get_width()//2, self.height//2 - 30))
-        self.screen.blit(high_score, (self.width//2 - high_score.get_width()//2, self.height//2))
-        self.screen.blit(restart, (self.width//2 - restart.get_width()//2, self.height*3//4))
-        self.screen.blit(menu, (self.width//2 - menu.get_width()//2, self.height*3//4 + 30))
+
+        # Posição inicial (verticalmente centralizado no topo) -> Para ter uma base e alterar a partir dela
+        center_x = self.width // 2
+        y = self.height // 4
+
+        # Desenha cada elemento um abaixo do outro
+        #GAME OVER
+        self.screen.blit(game_over, (center_x - game_over.get_width() // 2, y))
+        y += game_over.get_height() + 20
+        #Red_score
+        self.screen.blit(red_score, (center_x - red_score.get_width() // 2, y))
+        y += red_score.get_height() + 10
+        #White_score
+        self.screen.blit(white_score, (center_x - white_score.get_width() // 2, y))
+        y += white_score.get_height() + 10
+        #Blue_score
+        self.screen.blit(blue_score, (center_x - blue_score.get_width() // 2, y))
+        y += blue_score.get_height() + 40
+        #Restart
+        self.screen.blit(restart, (center_x - restart.get_width() // 2, y))
+        y += restart.get_height() + 10
+
+        self.screen.blit(menu, (center_x - menu.get_width() // 2, y))
