@@ -56,7 +56,8 @@ class FlappyPig:
         self.all_sprites.add(top_pipe, bottom_pipe)
         self.pipes.add(top_pipe, bottom_pipe)
 
-    def create_item(self,y): #Modificar posteriormente para em vez de receber uma cor, receber uma imagem para trocar ao coletar
+    def create_item(self, center_item): #Modificar posteriormente para em vez de receber uma cor, receber uma imagem para trocar ao coletar
+        y = center_item
         item_type = random.choice(["blue", "red", "white"])
         new_item = Item(self.width + 50, y, item_type)
         self.items.add(new_item)
@@ -66,8 +67,7 @@ class FlappyPig:
         running = True
         while running:
             events = pygame.event.get()  # conta todos os eventos (teclas e cliques) desde o ultimo loop
-            yaleatorio = random.randint(self.height // 4, 3 * self.height // 4)
-
+            gap_center_main = random.randint(self.height // 4, 3 * self.height // 4)
             # Controles
             for event in events:
                 if event.type == pygame.QUIT: ###fechar o jogo caso aperte o fechar no superior direito
@@ -77,14 +77,13 @@ class FlappyPig:
                     if self.manager.state == GameState.PLAYING: 
                         if event.key == pygame.K_SPACE or event.key == pygame.K_UP or event.key == pygame.K_w: ##apertar espaço, seta pra cima ou W -> Pular
                             self.player.jump()
-
-                
-                if event.type == self.pipe_timer and self.manager.state == GameState.PLAYING: ##gerar um cano após o timer 
-                    self.create_pipe(yaleatorio)
-                
+                 
                 if event.type == self.item_timer and self.manager.state == GameState.PLAYING: ## mesma coisa com item
-                    self.create_item(yaleatorio)
-            
+                    self.create_item(gap_center_main)
+                
+                if event.type == self.pipe_timer and self.manager.state == GameState.PLAYING: ##gerar um cano após o timer
+                    self.create_pipe(gap_center_main)
+                
             # Lógica do jogo
             if self.manager.state == GameState.MENU: ##o que fazer na tela de menu
                 result = self.menu_screen.handle_events(events) ##resultado do menu
