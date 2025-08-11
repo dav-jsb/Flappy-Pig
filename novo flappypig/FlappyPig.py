@@ -66,6 +66,7 @@ class FlappyPig:
     
     def run_game(self): ###loop principal do jogo
         running = True
+        ximage = 0
         while running:
             events = pygame.event.get()  # conta todos os eventos (teclas e cliques) desde o ultimo loop
             gap_center_main = random.randint(self.height // 4, 3 * self.height // 4)
@@ -109,7 +110,12 @@ class FlappyPig:
                     self.manager.add_item_score(item.tipo)
                 
                 # Renderização
-                self.screen.fill(Cores.PRETO) ###fundo preto
+                cenario = pygame.image.load("assets/terreno.png")
+                self.screen.fill(Cores.PRETO )
+                self.screen.blit(cenario, (ximage,self.height - cenario.get_height())) ###fundo preto
+                self.screen.blit(cenario, (ximage+cenario.get_height(),self.height - cenario.get_height())) ###fundo preto
+                ximage -= velocidade_mapa//2
+                if ximage+cenario.get_height()<=0: ximage+=cenario.get_height()
                 self.all_sprites.draw(self.screen) ## colocar todos os objetos da tela
                 
                 # Mostra pontuação SEPARADAMENTE
