@@ -9,6 +9,8 @@ from Item import Item
 from GameState import GameState,GameManager
 from TelaMenu import TelaMenu
 from TelaEnd import TelaEnd
+from Assets import load_assets 
+#adicionei esse dicionário para buscar os arquivos mais facilmente
 
 class FlappyPig:
     ##construtor da classe, os valores aqui são escolhidos ao criar um objeto nessa classe
@@ -29,28 +31,30 @@ class FlappyPig:
         self.clock = pygame.time.Clock() ## Inicia o relógio do jogo
         self.fps = 60 ##frames por segundo
 
+        #Carregando os assets
+        self.assets = load_assets()
+
         # Grupos de sprites
         self.all_sprites = pygame.sprite.Group()
         self.pipes = pygame.sprite.Group()
         self.items = pygame.sprite.Group()
         
-        # Jogador
-        self.player = Pig(self.width//4, self.height//2,gravity,pulo) #objeto do tipo Pig, o porco do jogo
+        # Jogador ##Fiz alterações na imagem de carregamento, puxando de uma função criada em assets.py
+        self.player = Pig(self.width//4, self.height//2, gravity, pulo,self.assets["pig_default"]) #objeto do tipo Pig, o porco do jogo
         self.all_sprites.add(self.player) 
         
         # Timers -> Separar a lógica de criação de canos e itens com tempo determinado
         self.pipe_timer = pygame.USEREVENT + 1
         self.item_timer = pygame.USEREVENT + 2
         pygame.time.set_timer(self.pipe_timer, 1500)
-        pygame.time.set_timer(self.item_timer, 3000)
+        pygame.time.set_timer(self.item_timer, 1500)
         
         # Telas ##inicia as outras telas, com o gerenciador e o tamanho
         self.menu_screen = TelaMenu(self.width, self.height, self.manager) 
         self.game_over_screen = TelaEnd(self.width, self.height, self.manager)
 
-    def create_pipe(self):
+    def create_pipe(self, gap_center):
         # Define onde vai ficar o centro do gap (com margens de segurança)
-        gap_center = random.randint(self.height // 4, 3 * self.height // 4)
         color = self.color_pipe
         speed = 3 #Velocidade do pipe
         top_pipe = Pipe(self.width + 60, gap_center, True, speed, color, self.height)
@@ -58,18 +62,20 @@ class FlappyPig:
         self.all_sprites.add(top_pipe, bottom_pipe)
         self.pipes.add(top_pipe, bottom_pipe)
 
-    def create_item(self): #Modificar posteriormente para em vez de receber uma cor, receber uma imagem para trocar ao coletar
-        y = random.randint(100, 500)
-        item_type = random.choice(["blue", "red", "white"])
-        new_item = Item(self.width + 50, y, item_type)
+    def create_item(self, center_item): #Modificar posteriormente para em vez de receber uma cor, receber uma imagem para trocar ao coletar
+        y = center_item
+        item_type = random.choice(["blue", "red", "white"]) #dependendo da cor o item muda
+        image_key = f"{item_type}_item" #Faz toda a verificação buscando a chave no dic 
+        new_item = Item(self.width + 60, y, item_type, self.assets[image_key],size=(30,30)) #alterei para buscar no dicionário a imagem
         self.items.add(new_item)
         self.all_sprites.add(new_item)
     
     def run_game(self): ###loop principal do jogo
         running = True
+        ximage = 0
         while running:
             events = pygame.event.get()  # conta todos os eventos (teclas e cliques) desde o ultimo loop
-
+            gap_center_main = random.randint(self.height // 4, 3 * self.height // 4)
             # Controles
             for event in events:
                 if event.type == pygame.QUIT: ###fechar o jogo caso aperte o fechar no superior direito
@@ -79,13 +85,13 @@ class FlappyPig:
                     if self.manager.state == GameState.PLAYING: 
                         if event.key == pygame.K_SPACE or event.key == pygame.K_UP or event.key == pygame.K_w: ##apertar espaço, seta pra cima ou W -> Pular
                             self.player.jump()
-
-                if event.type == self.pipe_timer and self.manager.state == GameState.PLAYING: ##gerar um cano após o timer
-                    self.create_pipe()
-                
+                 
                 if event.type == self.item_timer and self.manager.state == GameState.PLAYING: ## mesma coisa com item
-                    self.create_item()
-            
+                    self.create_item(gap_center_main)
+                
+                if event.type == self.pipe_timer and self.manager.state == GameState.PLAYING: ##gerar um cano após o timer
+                    self.create_pipe(gap_center_main)
+                
             # Lógica do jogo
             if self.manager.state == GameState.MENU: ##o que fazer na tela de menu
                 result = self.menu_screen.handle_events(events) ##resultado do menu
@@ -93,7 +99,7 @@ class FlappyPig:
                     running = False
                 elif result == "game":
                     self.manager.state = GameState.PLAYING ##iniciar o jogo
-                self.menu_screen.draw()
+                self.menu_screen.draw() ###ESTÁ COM UM ERRO AQUI! UMA IMAGEM NÃO ESTÁ SENDO PASSADA COMO SPRITE, VERIFICAR!!!! vê GameObject, Item ou Pig, está em um deles
             
             elif self.manager.state == GameState.PLAYING: ##passar todos os objetos do jogo a cada execução do loop
                 # Atualizações
@@ -108,16 +114,22 @@ class FlappyPig:
                 collected = pygame.sprite.spritecollide(self.player, self.items, True)
                 for item in collected:
                     self.manager.add_item_score(item.tipo)
+                    self.player.change_skin(f"pig_{item.tipo}") #alterando a imagem com base no aquivo assets
                 
                 # Renderização
-                self.screen.fill(Cores.PRETO) ###fundo preto
+                cenario = pygame.image.load("cenario.png")
+                self.screen.fill(Cores.PRETO )
+                self.screen.blit(cenario, (ximage,self.height - cenario.get_height())) ###fundo preto
+                self.screen.blit(cenario, (ximage+cenario.get_height(),self.height - cenario.get_height())) ###fundo preto
+                ximage -= velocidade_mapa//2
+                if ximage+cenario.get_height()<=0: ximage+=cenario.get_height()
                 self.all_sprites.draw(self.screen) ## colocar todos os objetos da tela
                 
-                # Mostra pontuação SEPARADAMENTE
+                # Mostra pontuação SEPARADAMENTE / mudei o texto dos coletáveis
                 font = pygame.font.SysFont('Arial', 30)
-                score_blue_text = font.render(f"Blue: {self.manager.score_blue}", True, Cores.AZUL)
-                score_red_text = font.render(f"Red: {self.manager.score_red}", True, Cores.VERMELHO)
-                score_white_text = font.render(f"White: {self.manager.score_white}", True, Cores.BRANCO) 
+                score_blue_text = font.render(f"Wizard Hat: {self.manager.score_blue}", True, Cores.AZUL)
+                score_red_text = font.render(f"Fire: {self.manager.score_red}", True, Cores.VERMELHO)
+                score_white_text = font.render(f"Spider: {self.manager.score_white}", True, Cores.BRANCO) 
 
                 self.screen.blit(score_blue_text, (10, 10))
                 self.screen.blit(score_red_text, (10, 40))
