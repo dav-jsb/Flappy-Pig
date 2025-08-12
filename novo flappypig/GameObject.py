@@ -3,8 +3,11 @@ import pygame
 class GameObject(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, color=None, image_path=None):
         super().__init__()
-        if image_path:
-            self.image = pygame.image.load(image_path).convert_alpha()
+        if image_path: #alterei para poder receber tanto uma imagem quanto uma surface
+            if isinstance(image_path, pygame.Surface):
+                self.image = image_path
+            elif isinstance(image_path, str):
+                self.image = pygame.image.load(image_path).convert_alpha()
         else:
             self.image = pygame.Surface((width, height))
             if color:
