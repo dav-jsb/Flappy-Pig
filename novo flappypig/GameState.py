@@ -10,11 +10,15 @@ class GameManager:
         self.score_blue = 0
         self.score_red = 0
         self.score_white = 0
+        self.score_yellow = 0
+        self.score_green = 0
     #Função para resetar a pontuação após o término do jogo
     def reset(self):
         self.score_blue = 0
         self.score_red = 0
         self.score_white = 0
+        self.score_yellow = 0
+        self.score_green = 0
         self.state = GameState.PLAYING
     
     def game_over(self):
@@ -27,3 +31,7 @@ class GameManager:
             self.score_red += 1
         elif item_type == "white":
             self.score_white += 1
+        elif item_type == 'yellow':
+            self.score_yellow += 1
+        elif item_type == 'green':
+            self.score_green += 1
