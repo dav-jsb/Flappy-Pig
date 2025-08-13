@@ -168,11 +168,12 @@ class FlappyPig:
                 terreno = self.assets["terreno"]
                 nuvens = self.assets["nuvens"]
                 self.screen.fill(Cores.AZUL_CLARO) #ceu azul
-                for _ in range(2) :
+                for _ in range(3) :
                     self.screen.blit(terreno, (_ * terreno.get_width() + xterreno, (self.height//2) + 55)) #chao
                     self.screen.blit(nuvens ,(_ * nuvens.get_width() + xnuvem,0)) #nuvens no ceu
+                    self.screen.blit(nuvens ,(_ * nuvens.get_width() + xnuvem,nuvens.get_height()+30 )) #nuvens no ceu
                 self.all_sprites.draw(self.screen) ## colocar todos os objetos da tela
-                xterreno -= 1
+                xterreno -= 2
                 xnuvem -= 1
                 if (abs(xterreno) > terreno.get_width()) :
                     xterreno = 0
