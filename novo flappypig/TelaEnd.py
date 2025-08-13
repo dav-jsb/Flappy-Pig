@@ -10,7 +10,7 @@ class TelaEnd(TelaBase):
         if assets and "game_over_screen" in assets:
             end_image = assets["game_over_screen"]
         else:
-            end_image = pygame.image.load("game_over.png").convert_alpha()
+            end_image = pygame.image.load("assets/game_over.png").convert_alpha()
         self.end_image = pygame.transform.smoothscale(end_image, (self.width, self.height))
 
         # fonte dos números

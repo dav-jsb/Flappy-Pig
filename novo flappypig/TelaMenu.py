@@ -21,7 +21,7 @@ class TelaMenu(TelaBase):
     def draw(self):
         #alterei para que recebesse uma imagem no lugar de um texto escrito
         self.screen.fill(Cores.PRETO)
-        menu_img = pygame.image.load("menu_com_texto.png").convert_alpha()
+        menu_img = pygame.image.load("assets/menu_com_texto.png").convert_alpha()
         menu_img = pygame.transform.scale(menu_img, (self.width,self.height))
 
         self.screen.blit(menu_img, (0, 0))
