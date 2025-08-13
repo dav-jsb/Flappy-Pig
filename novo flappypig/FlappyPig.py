@@ -99,7 +99,7 @@ class FlappyPig:
                     running = False
                 elif result == "game":
                     self.manager.state = GameState.PLAYING ##iniciar o jogo
-                self.menu_screen.draw() ###ESTÁ COM UM ERRO AQUI! UMA IMAGEM NÃO ESTÁ SENDO PASSADA COMO SPRITE, VERIFICAR!!!! vê GameObject, Item ou Pig, está em um deles
+                self.menu_screen.draw()
             
             elif self.manager.state == GameState.PLAYING: ##passar todos os objetos do jogo a cada execução do loop
                 # Atualizações
@@ -113,8 +113,8 @@ class FlappyPig:
                 #ALTEREI AQUI PARA CONTABILIZAR OS PONTOS
                 collected = pygame.sprite.spritecollide(self.player, self.items, True)
                 for item in collected:
-                    self.manager.add_item_score(item.tipo)
-                    self.player.change_skin(f"pig_{item.tipo}") #alterando a imagem com base no aquivo assets
+                    self.manager.add_item_score(item.tipo) 
+                    self.player.change_skin(self.assets[f"pig_{item.tipo}"])# BUSCA A CHAVE DOS ASSETS -> CARREGA O VALOR DEFINIDO NA FUNÇÃO DOS ASSETS
                 
                 # Renderização
                 cenario = pygame.image.load("cenario.png")
@@ -144,7 +144,7 @@ class FlappyPig:
                     self.all_sprites.empty()
                     self.pipes.empty()
                     self.items.empty()
-                    self.player = Pig(self.width//4, self.height//2,gravidade,altura_do_pulo)
+                    self.player = Pig(self.width//4, self.height//2,gravidade,altura_do_pulo,self.assets["pig_default"] )
                     self.all_sprites.add(self.player)
                     self.manager.state = GameState.PLAYING
                 elif result == "menu": ###voltar ao menu
