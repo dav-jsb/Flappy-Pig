@@ -1,3 +1,4 @@
+
 import pygame
 from GameObject import GameObject
 
@@ -5,10 +6,12 @@ class Item(GameObject):
     COLORS = {
         "blue": (0, 0, 255),
         "red": (255, 0, 0),
-        "white": (255, 255, 255)
+        "white": (255, 255, 255),
+        "yellow": (255,255,0),
+        "green": (0,255,0)
     }
 
-    def __init__(self, x, y, tipo, image_item, size=(30, 30)): #vai receber a imagem na main
+    def __init__(self, x, y, tipo, image_item, size=(30, 30)):
         width, height = size
         color = None if image_item else self.COLORS.get(tipo, (255,255,255))
         super().__init__(x, y, width, height, color, image_item)
