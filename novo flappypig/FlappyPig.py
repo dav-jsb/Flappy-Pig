@@ -211,5 +211,5 @@ gravidade = 0.5 #queda
 altura_do_pulo = -7 ##negativo pq a tela conta pra cima como -
 velocidade_mapa = 3
 espaco_entre_tubo = 150
-game = FlappyPig(gravidade,altura_do_pulo,Cores.VERDE,velocidade_mapa,espaco_entre_tubo) #cria um objeto do tipo FlappyPig
+game = FlappyPig(gravidade,altura_do_pulo,Cores.VERMELHO_CANO,velocidade_mapa,espaco_entre_tubo) #cria um objeto do tipo FlappyPig
 game.run_game() #inicia o jogo 
