@@ -19,9 +19,9 @@ class TelaMenu(TelaBase):
         return True
     
     def draw(self):
+        #alterei para que recebesse uma imagem no lugar de um texto escrito
         self.screen.fill(Cores.PRETO)
-        title = self.font.render("PIG FLAPPY", True, Cores.BRANCO)
-        start = self.font.render("Press SPACE to Start", True, Cores.BRANCO)
-        
-        self.screen.blit(title, (self.width//2 - title.get_width()//2, self.height//3))
-        self.screen.blit(start, (self.width//2 - start.get_width()//2, self.height//2))
+        menu_img = pygame.image.load("assets/menu_com_texto.png").convert_alpha()
+        menu_img = pygame.transform.scale(menu_img, (self.width,self.height))
+
+        self.screen.blit(menu_img, (0, 0))
