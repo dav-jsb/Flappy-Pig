@@ -31,8 +31,28 @@ class FlappyPig:
         self.clock = pygame.time.Clock() ## Inicia o relógio do jogo
         self.fps = 60 ##frames por segundo
 
+        #Fonte da pontuação
+        self.font = pygame.font.SysFont('Arial', 24)
+        self.hud_icon_size = 26
+
         #Carregando os assets
         self.assets = load_assets()
+        self.img_blue = self.assets["blue_item"]
+        self.img_green = self.assets["green_item"]
+        self.img_yellow = self.assets["yellow_item"]
+        self.img_red = self.assets["red_item"]
+        self.img_white = self.assets["white_item"]
+        self.terreno = self.assets["terreno"]
+        self.nuvens = self.assets["nuvens"]
+
+        #Ajustando a dimensão das imagens
+        self.hud_icons = {
+            "blue":  pygame.transform.smoothscale(self.assets["blue_item"],  (self.hud_icon_size, self.hud_icon_size)),
+            "red":   pygame.transform.smoothscale(self.assets["red_item"],   (self.hud_icon_size, self.hud_icon_size)),
+            "white": pygame.transform.smoothscale(self.assets["white_item"], (self.hud_icon_size, self.hud_icon_size)),
+            "yellow": pygame.transform.smoothscale(self.assets["yellow_item"], (self.hud_icon_size, self.hud_icon_size)),
+            "green": pygame.transform.smoothscale(self.assets["green_item"],  (self.hud_icon_size, self.hud_icon_size))
+        }
 
         # Grupos de sprites
         self.all_sprites = pygame.sprite.Group()
@@ -53,6 +73,7 @@ class FlappyPig:
         self.menu_screen = TelaMenu(self.width, self.height, self.manager) 
         self.game_over_screen = TelaEnd(self.width, self.height, self.manager)
 
+    #Função que incializa o cano
     def create_pipe(self, gap_center):
         # Define onde vai ficar o centro do gap (com margens de segurança)
         color = self.color_pipe
@@ -62,17 +83,43 @@ class FlappyPig:
         self.all_sprites.add(top_pipe, bottom_pipe)
         self.pipes.add(top_pipe, bottom_pipe)
 
-    def create_item(self, center_item): #Modificar posteriormente para em vez de receber uma cor, receber uma imagem para trocar ao coletar
+    #Função que incializa o item
+    def create_item(self, center_item):
         y = center_item
-        item_type = random.choice(["blue", "red", "white","yellow","green"]) #dependendo da cor o item muda // Mais colecionáveis adicionados
+        item_type = random.choice(["blue", "red", "white","yellow","green"]) #dependendo da cor o item muda
         image_key = f"{item_type}_item" #Faz toda a verificação buscando a chave no dic 
         new_item = Item(self.width + 60, y, item_type, self.assets[image_key],size=(30,30)) #alterei para buscar no dicionário a imagem
         self.items.add(new_item)
         self.all_sprites.add(new_item)
-    
-    def run_game(self): ###loop principal do jogo
+
+    #Função que contabiliza a pontuação
+    def draw_scoreboard(self):
+        x = 10
+        y = 10
+        gap = self.hud_icon_size + 8
+
+        def draw_row(key, value):
+            nonlocal y #A função interna vai modificar a variável y da função maior (não é muito bom de usar, mas quebra o galho)
+            icon = self.hud_icons.get(key)
+            # ícone
+            self.screen.blit(icon, (x, y))
+            # número alinhado verticalmente com o ícone
+            txt = self.font.render(str(value), True, Cores.BRANCO)
+            txt_y = y + (self.hud_icon_size - txt.get_height()) // 2
+            self.screen.blit(txt, (x + self.hud_icon_size + 8, txt_y))
+            y += gap
+
+        draw_row("blue",  self.manager.score_blue)
+        draw_row("red",   self.manager.score_red)
+        draw_row("white", self.manager.score_white)
+        draw_row("yellow", self.manager.score_yellow)
+        draw_row("green", self.manager.score_green)
+
+    #Função que roda o jogo
+    def run_game(self): 
         running = True
-        ximage = 0
+        xterreno = 0
+        xnuvem = 0
         while running:
             events = pygame.event.get()  # conta todos os eventos (teclas e cliques) desde o ultimo loop
             gap_center_main = random.randint(self.height // 4, 3 * self.height // 4)
@@ -114,33 +161,34 @@ class FlappyPig:
                 collected = pygame.sprite.spritecollide(self.player, self.items, True)
                 for item in collected:
                     self.manager.add_item_score(item.tipo) 
-                    self.player.change_skin(self.assets[f"pig_{item.tipo}"])# BUSCA A CHAVE DOS ASSETS -> CARREGA O VALOR DEFINIDO NA FUNÇÃO DOS ASSETS
+                    if f"pig_{item.tipo}" in self.assets:
+                        self.player.change_skin(self.assets[f"pig_{item.tipo}"])# BUSCA A CHAVE DOS ASSETS -> CARREGA O VALOR DEFINIDO NA FUNÇÃO DOS ASSETS
                 
                 # Renderização
-                cenario = pygame.image.load("cenario.png")
-                self.screen.fill(Cores.PRETO )
-                self.screen.blit(cenario, (ximage,self.height - cenario.get_height())) ###fundo preto
-                self.screen.blit(cenario, (ximage+cenario.get_height(),self.height - cenario.get_height())) ###fundo preto
-                ximage -= velocidade_mapa//2
-                if ximage+cenario.get_height()<=0: ximage+=cenario.get_height()
+                terreno = self.assets["terreno"]
+                nuvens = self.assets["nuvens"]
+                self.screen.fill(Cores.AZUL_CLARO) #ceu azul
+                for _ in range(2) :
+                    self.screen.blit(terreno, (_ * terreno.get_width() + xterreno, (self.height//2) + 55)) #chao
+                    self.screen.blit(nuvens ,(_ * nuvens.get_width() + xnuvem,0)) #nuvens no ceu
                 self.all_sprites.draw(self.screen) ## colocar todos os objetos da tela
-                
-                # Mostra pontuação SEPARADAMENTE / mudei o texto dos coletáveis
-                font = pygame.font.SysFont('Arial', 30)
-                score_blue_text = font.render(f"Wizard Hat: {self.manager.score_blue}", True, Cores.AZUL)
-                score_red_text = font.render(f"Fire: {self.manager.score_red}", True, Cores.VERMELHO)
-                score_white_text = font.render(f"Spider: {self.manager.score_white}", True, Cores.BRANCO) 
-
-                self.screen.blit(score_blue_text, (10, 10))
-                self.screen.blit(score_red_text, (10, 40))
-                self.screen.blit(score_white_text, (10, 70))
+                xterreno -= 1
+                xnuvem -= 1
+                if (abs(xterreno) > terreno.get_width()) :
+                    xterreno = 0
+                if (abs(xnuvem) > nuvens.get_width()) :
+                    xnuvem = 0
+                #Desenhando todos os objetos e colocando na tela
+                self.all_sprites.draw(self.screen)
+                #Desenhando e atualizando o placar a cada loop
+                self.draw_scoreboard()
             
             elif self.manager.state == GameState.GAME_OVER: 
                 result = self.game_over_screen.handle_events(events) ##obter ação
                 if result == False: ##encerrar
                     running = False
                 elif result == "game": ##reiniciar
-                    # Reset do jogo
+                    # Reset do jogo 
                     self.all_sprites.empty()
                     self.pipes.empty()
                     self.items.empty()
@@ -155,10 +203,8 @@ class FlappyPig:
                     self.all_sprites.add(self.player)
                     self.manager.state = GameState.MENU
                 self.game_over_screen.draw() ###tela de endgame
-             
-            pygame.display.flip() ###tbm não sei
+            pygame.display.flip() 
             self.clock.tick(self.fps) #somar o tempo
-        
         pygame.quit()
 
 gravidade = 0.5 #queda
