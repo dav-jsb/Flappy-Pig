@@ -11,7 +11,7 @@ def load_assets():
     assets['yellow_item'] = pygame.image.load("assets/meal.png").convert_alpha() # meal 
 
     # Skins do porco
-    assets["pig_default"] = pygame.image.load("assets/vanilla pig.png").convert_alpha()
+    assets["pig_default"] = pygame.image.load("assets/pig_default.png").convert_alpha()
     assets["pig_white"] = pygame.image.load("assets/spider_pig.png").convert_alpha()
     assets["pig_blue"] = pygame.image.load("assets/wizard_pig.png").convert_alpha()
     assets["pig_red"] = pygame.image.load("assets/blazed_pig.png").convert_alpha()
