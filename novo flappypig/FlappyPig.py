@@ -64,7 +64,7 @@ class FlappyPig:
 
     def create_item(self, center_item): #Modificar posteriormente para em vez de receber uma cor, receber uma imagem para trocar ao coletar
         y = center_item
-        item_type = random.choice(["blue", "red", "white"]) #dependendo da cor o item muda
+        item_type = random.choice(["blue", "red", "white","yellow","green"]) #dependendo da cor o item muda // Mais colecionáveis adicionados
         image_key = f"{item_type}_item" #Faz toda a verificação buscando a chave no dic 
         new_item = Item(self.width + 60, y, item_type, self.assets[image_key],size=(30,30)) #alterei para buscar no dicionário a imagem
         self.items.add(new_item)
