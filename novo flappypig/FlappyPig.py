@@ -179,9 +179,9 @@ class FlappyPig:
                         pygame.mixer.Sound.play(self.fire_som)
                     elif item.tipo == "white": ##se o item for branco, toca o som de aranha
                         pygame.mixer.Sound.play(self.spider_som) ##toca o som de aranha
-                    elif item.tipo == "yellow": ##se o item for amarelo, toca o som de asas
-                        pygame.mixer.Sound.play(self.wing_som) ##toca o som de asas
-                    #elif item.tipo == "green": ##se o item for verde, toca o som de magia   
+                    #elif item.tipo == "yellow": ##se o item for amarelo
+
+                    #elif item.tipo == "green": ##se o item for verde
             
                     
                     if f"pig_{item.tipo}" in self.assets:
