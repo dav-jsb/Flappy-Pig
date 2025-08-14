@@ -10,4 +10,16 @@ class Cores:
     CIANO = (0,255,255)
     PRETO = (0,0,0)
     
+class Panela:
+    # Constantes para os caminhos das imagens
+    TOP =    'panela/topo panela.png'
+    MIDDLE = 'panela/preencimento panela 1px.png'
+    BOTTOM = 'panela/fim da panela 6px.png'
+    
+    # Constantes para as dimensões do sprite composto
+    LARGURA = 115
+    ALTURA = 1000  # Altura total do sprite composto
+    ALTURA_TOP = 68  # Altura da parte superior
+    ALTURA_BOTTOM = 7  # Altura da parte inferior
+    ALTURA_MIDDLE = 1 # Altura da parte do meio
 
