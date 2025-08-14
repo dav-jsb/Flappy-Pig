@@ -37,6 +37,8 @@ class FlappyPig:
         self.punch_som = pygame.mixer.Sound('assets/punch.mp3') ##carrega o som de soco
         self.spider_som = pygame.mixer.Sound('assets/spider.mp3') ##carrega o som de aranha
         self.wing_som = pygame.mixer.Sound('assets/wing-flap.mp3') ##carrega o som de asas
+        self.head_som = pygame.mixer.Sound('assets/cabeca_sfx.mp3') ##carrega o som de porco
+        self.carrot_som = pygame.mixer.Sound('assets/cenoura_sfx.mp3') ##carrega o som da cenoura
 
         self.manager = GameManager()  ##criando um objeto pra gerenciar as telas do tipo GameManager 
         self.clock = pygame.time.Clock() ## Inicia o relógio do jogo
@@ -179,10 +181,10 @@ class FlappyPig:
                         pygame.mixer.Sound.play(self.fire_som)
                     elif item.tipo == "white": ##se o item for branco, toca o som de aranha
                         pygame.mixer.Sound.play(self.spider_som) ##toca o som de aranha
-                    #elif item.tipo == "yellow": ##se o item for amarelo
-
-                    #elif item.tipo == "green": ##se o item for verde
-            
+                    elif item.tipo == "yellow": ##se o item for amarelo, toca som de porco
+                        pygame.mixer.Sound.play(self.head_som)
+                    elif item.tipo == "green": ##se o item for verde, toca som de cenoura
+                        pygame.mixer.Sound.play(self.carrot_som)
                     
                     if f"pig_{item.tipo}" in self.assets:
                         self.player.change_skin(self.assets[f"pig_{item.tipo}"])# BUSCA A CHAVE DOS ASSETS -> CARREGA O VALOR DEFINIDO NA FUNÇÃO DOS ASSETS
