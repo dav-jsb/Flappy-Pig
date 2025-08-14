@@ -27,13 +27,24 @@ class FlappyPig:
         self.screen = pygame.display.set_mode((self.width, self.height)) ##inicia a tela, (cria um objeto do tipo tela)
         pygame.display.set_caption("Flappy Pig") ##nome da janela
         
+        pygame.mixer.init() ##inicia o mixer de som do pygame
+        pygame.mixer.music.load("assets/Music_menu_screen.mp3") ##carrega a música de fundo
+        pygame.mixer.music.set_volume(0.5) ##volume da música
+        pygame.mixer.music.play(-1) ##toca a música em loop infinito
+        
+        self.fire_som = pygame.mixer.Sound('assets/fire.mp3') ##carrega o som de fogo
+        self.magic_som = pygame.mixer.Sound('assets/magic.mp3') ##carrega o som de magia
+        self.punch_som = pygame.mixer.Sound('assets/punch.mp3') ##carrega o som de soco
+        self.spider_som = pygame.mixer.Sound('assets/spider.mp3') ##carrega o som de aranha
+        self.wing_som = pygame.mixer.Sound('assets/wing-flap.mp3') ##carrega o som de asas
+
         self.manager = GameManager()  ##criando um objeto pra gerenciar as telas do tipo GameManager 
         self.clock = pygame.time.Clock() ## Inicia o relógio do jogo
         self.fps = 60 ##frames por segundo
 
         #Fonte da pontuação
-        self.font = pygame.font.SysFont('Arial', 24)
-        self.hud_icon_size = 26
+        self.font = pygame.font.SysFont('Arial', 24)  # Fonte para o placar
+        self.hud_icon_size = 26 ## Tamanho dos ícones do HUD
 
         #Carregando os assets
         self.assets = load_assets()
@@ -131,7 +142,7 @@ class FlappyPig:
                     if self.manager.state == GameState.PLAYING: 
                         if event.key == pygame.K_SPACE or event.key == pygame.K_UP or event.key == pygame.K_w: ##apertar espaço, seta pra cima ou W -> Pular
                             self.player.jump()
-
+                            pygame.mixer.Sound.play(self.wing_som) ##toca o som de asas
                 
                 if event.type == self.pipe_timer and self.manager.state == GameState.PLAYING: ##gerar um cano após o timer 
                     self.create_pipe(yaleatorio)
@@ -156,14 +167,25 @@ class FlappyPig:
                 
                 # Colisões
                 if pygame.sprite.spritecollideany(self.player, self.pipes): ###colidir com um cano e perder
+                    pygame.mixer.Sound.play(self.punch_som) ##toca o som de punch
                     self.manager.game_over() ##mudar para o modo de endgame
                 #ALTEREI AQUI PARA CONTABILIZAR OS PONTOS
                 collected = pygame.sprite.spritecollide(self.player, self.items, True)
                 for item in collected:
-                    self.manager.add_item_score(item.tipo) 
+                    self.manager.add_item_score(item.tipo)
+                    if item.tipo == "blue": ##se o item for azul, toca o som de magia
+                        pygame.mixer.Sound.play(self.magic_som) ##toca o som de magia
+                    elif item.tipo == "red": ##se o item for vermelho, toca o som de fogo
+                        pygame.mixer.Sound.play(self.fire_som)
+                    elif item.tipo == "white": ##se o item for branco, toca o som de aranha
+                        pygame.mixer.Sound.play(self.spider_som) ##toca o som de aranha
+                    elif item.tipo == "yellow": ##se o item for amarelo, toca o som de asas
+                        pygame.mixer.Sound.play(self.wing_som) ##toca o som de asas
+                    #elif item.tipo == "green": ##se o item for verde, toca o som de magia   
+            
+                    
                     if f"pig_{item.tipo}" in self.assets:
                         self.player.change_skin(self.assets[f"pig_{item.tipo}"])# BUSCA A CHAVE DOS ASSETS -> CARREGA O VALOR DEFINIDO NA FUNÇÃO DOS ASSETS
-                
                 # Renderização
                 terreno = self.assets["terreno"]
                 nuvens = self.assets["nuvens"]
