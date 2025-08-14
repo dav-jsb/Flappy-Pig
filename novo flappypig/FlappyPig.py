@@ -87,7 +87,7 @@ class FlappyPig:
     def create_pipe(self,gap_center):
         # Define onde vai ficar o centro do gap (com margens de segurança)
         top_pipe = Pipe(self.width + 60, gap_center+self.espaco_tubo//2, self.height, self.map_speed, self.color_pipe)
-        bottom_pipe = Pipe(self.width + 60, 0,gap_center-self.espaco_tubo//2, self.map_speed, self.color_pipe)
+        bottom_pipe = Pipe(self.width + 60, -68,gap_center-self.espaco_tubo//2, self.map_speed, self.color_pipe)
         #Pipe(self.width + 60, gap_center+self.espaco_tubo//2, False, speed, color, self.height)
         self.all_sprites.add(top_pipe, bottom_pipe)
         self.pipes.add(top_pipe, bottom_pipe)
